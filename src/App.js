@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import './App.css';
 
 class App extends Component {
@@ -6,12 +7,14 @@ class App extends Component {
     super(props);
 
     this.state = {
-      str: 8,
-      dex: 8,
-      con: 8,
-      int: 8,
-      wis: 8,
-      chr: 8,
+      abilities: {
+				str: 8,
+				dex: 8,
+				con: 8,
+				int: 8,
+				wis: 8,
+				chr: 8,
+			},
       cost: {
 				8: 0,
 				9: 1,
@@ -25,9 +28,17 @@ class App extends Component {
       totalPoints: 27
     };
 
-    this.pointCost = this.pointCost.bind(this);
     this.modifyTotal = this.modifyTotal.bind(this);
+		this.myCallback = this.myCallback.bind(this);
   }
+	//
+	// incrementAbility(abilityScore) {
+	// 	return abilityScore + 1;
+	// }
+	//
+	// decrementAbility(abilityScore) {
+	// 	return abilityScore - 1;
+	// }
 
   modifyTotal(points) {
     const newTotal = this.state.totalPoints + points;
@@ -37,21 +48,15 @@ class App extends Component {
     });
   }
 
-  pointCost(ability) {
-    const cost = this.state.cost[ability];
-    //this.modifyTotal(cost);
-    return cost;
-  }
+	myCallback = (dataFromChild) => {
+		//somethign goes here for datafromchild
+	};
 
   render() {
 
 		const {
-			str,
-			dex,
-      con,
-			int,
-			wis,
-      chr
+			abilities,
+			cost
 		} = this.state;
 
     return (
@@ -60,53 +65,61 @@ class App extends Component {
           <h1 className="App-title">Character Builder</h1>
         </header>
         <div className="App-intro">
-          <AbilityScore
-            ability="Strength"
-            val={str}
-						cost={this.pointCost(str)}
-          >
-
-          </AbilityScore>
-					<AbilityScore
-            ability="Dexterity"
-            val={dex}
-            cost={this.pointCost(dex)}
-          />
-					<AbilityScore
-            ability="Constitution"
-            val={con}
-            cost={this.pointCost(con)}
-          />
-					<AbilityScore
-            ability="Intelligence"
-            val={int}
-            cost={this.pointCost(int)}
-          />
-					<AbilityScore
-            ability="Wisdom"
-            val={wis}
-            cost={this.pointCost(wis)}
-          />
-					<AbilityScore
-            ability="Charisma"
-            val={chr}
-            cost={this.pointCost(chr)}
-          />
+					<AbilityList
+						abilities={abilities}
+						cost={cost}
+					/>
         </div>
       </div>
     );
   }
 }
 
+const AbilityList = ({ abilities, cost }) =>
+		<ul className="ability-list">
+			{console.log(abilities, cost)}
+			{
+				Object.entries(abilities).map((item, index) => {
+					return <div key={index}>
+						<AbilityScore
+							ability={item[0]}
+							val={item[1]}
+							cost={cost}
+						/>
+						<AbilityScoreDropdown
+							val={cost}
+							ability={item[0]}
+							onSelect={ console.log('test')}
+						/>
+					</div>
+				})
+			}
+		</ul>;
+
+const AbilityScoreDropdown = ({ val, ability, value }) =>
+	<ButtonToolbar>
+		<DropdownButton title="Modify Ability" id="dropdown-size-medium" onSelect={function(value){return value.eventKey}} >
+		{console.log(val, ability)}
+		{ Object.entries(val).map((stat, index) => {
+				return <MenuItem
+					key={index}
+					eventKey={stat[1]}>{stat[0]}
+				</MenuItem>
+		})
+		}
+		</DropdownButton>
+	</ButtonToolbar>;
+
 const AbilityScore = ({ ability, val, cost }) => {
   const bonus = Math.floor((val - 10)/2);
+  const abilityCost = cost[val];
   return (
-    <div className="ability-score">
+    <li className="ability-score">
       <span>{ability}</span>
       <span>{val}</span>
       <span>{bonus}</span>
-			<span>{cost}</span>
-    </div>
+			<span>{abilityCost}</span>
+    </li>
   )
 };
 
