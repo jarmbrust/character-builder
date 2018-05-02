@@ -1,32 +1,36 @@
 import React, { Component } from 'react';
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import './App.css';
+import { Provider } from 'react-redux';
+import store from './store';
+import { connect } from 'react-redux';
+import { modifyAbility } from './actions/abilityAction'
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      abilities: {
-				str: 8,
-				dex: 8,
-				con: 8,
-				int: 8,
-				wis: 8,
-				chr: 8,
-			},
-      cost: {
-				8: 0,
-				9: 1,
-				10: 2,
-				11: 3,
-				12: 4,
-				13: 5,
-				14: 7,
-				15: 9
-			},
-      totalPoints: 27
-    };
+    // this.state = {
+    //   abilities: {
+		// 		str: 8,
+		// 		dex: 8,
+		// 		con: 8,
+		// 		int: 8,
+		// 		wis: 8,
+		// 		chr: 8,
+		// 	},
+    //   cost: {
+		// 		8: 0,
+		// 		9: 1,
+		// 		10: 2,
+		// 		11: 3,
+		// 		12: 4,
+		// 		13: 5,
+		// 		14: 7,
+		// 		15: 9
+		// 	},
+    //   totalPoints: 27
+    // };
 
     this.modifyTotal = this.modifyTotal.bind(this);
 		this.myCallback = this.myCallback.bind(this);
@@ -39,6 +43,12 @@ class App extends Component {
 	// decrementAbility(abilityScore) {
 	// 	return abilityScore - 1;
 	// }
+
+
+	componentWillMount() {
+		this.props.modifyAbility();
+	}
+
 
   modifyTotal(points) {
     const newTotal = this.state.totalPoints + points;
@@ -60,17 +70,19 @@ class App extends Component {
 		} = this.state;
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Character Builder</h1>
-        </header>
-        <div className="App-intro">
-					<AbilityList
-						abilities={abilities}
-						cost={cost}
-					/>
-        </div>
-      </div>
+			<Provider store={store}>
+				<div className="App">
+					<header className="App-header">
+						<h1 className="App-title">Character Builder</h1>
+					</header>
+					<div className="App-intro">
+						<AbilityList
+							abilities={abilities}
+							cost={cost}
+						/>
+					</div>
+				</div>
+			</Provider>
     );
   }
 }
@@ -86,7 +98,11 @@ const AbilityList = ({ abilities, cost }) =>
 							val={item[1]}
 							cost={cost}
 						/>
-						?
+						<AbilityScoreDropdown 
+							ability={item[0]}
+							val={cost}
+							onSelect={ console.log('test') }
+						/>
 					</div>
 				})
 			}
