@@ -86,11 +86,7 @@ const AbilityList = ({ abilities, cost }) =>
 							val={item[1]}
 							cost={cost}
 						/>
-						<AbilityScoreDropdown
-							val={cost}
-							ability={item[0]}
-							onSelect={ console.log('test')}
-						/>
+						?
 					</div>
 				})
 			}
