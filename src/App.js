@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import './App.css';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import store from './store';
-import { connect } from 'react-redux';
 import { modifyAbility } from './actions/abilityAction'
 
 class App extends Component {
