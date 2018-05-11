@@ -1,9 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
 import rootReducer from './reducers/abilityReducer';
 
 const initialState = {
-    abilities: {
+	abilities: {
 		str: 8,
 		dex: 8,
 		con: 8,
@@ -20,19 +19,15 @@ const initialState = {
 		13: 5,
 		14: 7,
 		15: 9
-	},  
+	},
 	totalPoints: 27
 };
 
-const middleware = [thunk];
+
 
 const store = createStore(
-	rootReducer, 
-	initialState,
-	compose(
-		applyMiddleware(...middleware),
-		window.__REXUX_DEVTOOLS_EXTENSION__&& window.__REDUX_DEVTOOLS_EXTENSION__()
-	)
+	rootReducer,
+	[initialState]
 );
 
 export default store;

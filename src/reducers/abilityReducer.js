@@ -22,15 +22,22 @@ const initialState = {
 	totalPoints: 27
 };
 
-export default function(state = initialState, action) {
+export default function reducer(state = initialState, action) {
+	console.log('action=', action);
 	switch (action.type) {
 		case MODIFY_ABILITY: 
 			return '';
 		case MODIFY_COST: 
 			return '';
 		case POINT_TOTAL: 
-			return '';
+			return modifyPoints(state, action);
 		default:
 			return state;
 	}
 }
+
+function modifyPoints(state, action) {
+	console.log('modifypoints')
+	return state.map(points => points + action.payload);
+}
+
